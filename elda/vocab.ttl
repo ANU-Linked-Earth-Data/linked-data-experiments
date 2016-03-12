@@ -1,0 +1,65 @@
+@prefix dc:      <http://purl.org/dc/elements/1.1/> .
+@prefix dct:     <http://purl.org/dc/terms/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix api:     <http://purl.org/linked-data/api/vocab#> .
+@prefix elda:    <http://www.epimorphics.com/vocabularies/lda#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix geo:     <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix sioc:    <http://rdfs.org/sioc/ns/>.
+@prefix sioct:   <http://rdfs.org/sioc/types/>.
+# Recursion!
+@prefix lde:     <https://gitlab.cecs.anu.edu.au/u5568237/linked-data-experiments/raw/master/vocab.ttl#> .
+
+lde:tweet rdf:type owl:Class
+    ; rdfs:label "A tweet"
+    ; rdfs:subClassOf sioct:MicroblogPost
+    .
+
+lde:tweet_id rdf:type rdf:Property
+    ; rdfs:domain lde:actpol_tweet
+    ; rdfs:label "The tweet id."
+    ; rdfs:range xsd:integer
+    .
+
+lde:actpol_tweet rdf:type owl:Class
+    ; rdfs:subClassOf lde:tweet
+    ; rdfs:label "an ACTPol tweet"
+    .
+
+lde:is_accident rdf:type rdf:Property
+    ; rdfs:domain lde:actpol_tweet
+    ; rdfs:label "Whether a tweet is an accident notification"
+    ; rdfs:range xsd:boolean
+    .
+
+lde:location rdf:type owl:Class .
+lde:latlong rdf:type rdf:Property
+    ; rdfs:domain lde:location
+    ; rdfs:label "Latitude and longitude"
+    .
+ 
+lde:mentioned_location rdf:type rdf:Property
+    ; rdfs:domain lde:actpol_tweet
+    ; rdfs:label "The mentioned locations in a tweet"
+    ; rdfs:subClassOf lde:location
+    .
+
+
+lde:Accident a lde:Tweet .
+lde:Accident_street a xsd:string .
+
+# Is this right? Is there any way of saying "an accident is a tweet with a street, suburb, latitude & longitude"?
+# All the examples I see are about "filling" those fields in -- not declaring their existence
+
+# some example accident:
+
+lde:Accident_1 a lde:Accident
+  ; rdf:about <http://twitter.com/the_tweet_here>
+  ; geo:lat_long "0.0, 0.0"
+  ; sciot:content "HELLO"
+  .
+
