@@ -1,0 +1,65 @@
+# Adapted from the hello-world config
+
+# Assorted prefix declarations. Some of them are for the structuring
+# of the API config, others are for the vocabulary definitions.
+#
+
+@prefix api:                <http://purl.org/linked-data/api/vocab#> .
+@prefix dct:                <http://purl.org/dc/terms/> .
+
+@prefix rdf:                <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:               <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:                <http://www.w3.org/2001/XMLSchema#> .
+
+# The elda namespace/prefix is for Elda extensions to the LDA specification.
+@prefix elda:               <http://www.epimorphics.com/vocabularies/lda#> .
+
+# Prefix for example-local entities.
+@prefix lde:                <http://example.com/> .
+
+# ---------------------------------------------------------------------
+# API config
+
+lde:lde-api a api:API
+    ; rdfs:label "Accident data API"@en
+    ; api:sparqlEndpoint <local:lde-data.ttl>
+    # ; api:defaultViewer api:labelledDescribeViewer
+    ; api:defaultFormatter lde:HtmlFormatter
+    ; api:formatter
+        [a elda:FeedFormatter
+        ; api:name "atom"
+        ; elda:className "com.epimorphics.lda.renderers.FeedRendererFactory"
+        ; api:mimeType "application/atom+xml"
+        ]
+    ; api:endpoint lde:accidents
+    .
+
+# Endpoint definition
+
+lde:accidents a api:ListEndpoint
+    ; rdfs:label "Accidents"
+    ; api:uriTemplate "/accidents"
+    ; api:selector [api:filter "type=Accident"; api:sort "label"]
+    .
+#
+# This XSLT formatter produces rich HTML from the viewer properties.
+#
+
+lde:HtmlFormatter a api:XsltFormatter
+    ; api:name "html"
+    ; api:mimeType "text/html; charset=utf-8"
+    ; api:stylesheet "lda-assets/xslt/result-osm-trimmed.xsl"
+    # ; elda:shortnameMode elda:roundTrip
+    .
+
+lde:Accident a rdfs:Class
+    ; rdfs:label "Accident"
+    ; api:label "Accident"
+    .
+
+# The idea is that each instance of lde:Accident can have an lde:tweet property
+# giving the contents of the tweet in which the accident was reported.
+lde:tweet a rdf:Property
+    ; api:label "tweet"
+    ; rdfs:range xsd:string
+    .

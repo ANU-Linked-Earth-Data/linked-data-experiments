@@ -1,0 +1,27 @@
+#
+# Adapted from games data
+#
+
+@prefix dct:    <http://purl.org/dc/terms/> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix egc:    <http://epimorphics.com/public/vocabulary/games/>.
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix lde:    <http://example.com/> .
+
+lde:some-accident a lde:Accident
+    ; rdfs:label "Not sure whether this actually needs a label"@en
+    ; lde:tweet "Some road closed or something. Whatever."
+    .
+
+# This is duplicated from lde-config.ttl
+lde:Accident a rdfs:Class
+    ; rdfs:label "Accident"
+    ; api:label "Accident"
+    .
+
+lde:tweet a rdf:Property
+    ; api:label "tweet"
+    ; rdfs:range xsd:string
+    .
