@@ -1,4 +1,5 @@
 #!/bin/sh
 
 . ./get-elda.sh
-java -jar "$DEST" -Delda.spec=lde-config.ttl $@
+# Head to http://localhost:8080/standalone/accidents to see what's there.
+java -jar "$DEST" -Delda.spec "$(pwd)/lde-config.ttl" $@

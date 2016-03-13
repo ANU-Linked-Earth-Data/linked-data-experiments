@@ -2,6 +2,7 @@
 # Adapted from games data
 #
 
+@prefix api:    <http://purl.org/linked-data/api/vocab#> .
 @prefix dct:    <http://purl.org/dc/terms/> .
 @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix egc:    <http://epimorphics.com/public/vocabulary/games/>.
@@ -9,10 +10,13 @@
 @prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 @prefix owl:    <http://www.w3.org/2002/07/owl#> .
 @prefix lde:    <http://example.com/> .
+@prefix geo:    <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
 lde:some-accident a lde:Accident
     ; rdfs:label "Not sure whether this actually needs a label"@en
     ; lde:tweet "Some road closed or something. Whatever."
+    ; geo:long "153.0"^^xsd:decimal
+    ; geo:lat "-27.0"^^xsd:decimal
     .
 
 # This is duplicated from lde-config.ttl
