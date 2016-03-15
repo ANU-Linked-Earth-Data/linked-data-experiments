@@ -4,4 +4,4 @@ set -e
 
 . get-virtuoso.sh
 echo "Running Virtuoso"
-"$PREFIX/bin/virtuoso-t" +foreground
+"$PREFIX/bin/virtuoso-t" +foreground +configfile virtuoso.ini
