@@ -11,7 +11,7 @@ To convert the accident data into RDF, use `make_rdf.py`. This script has some
 dependencies (see `requirements.txt`). If you have `virtualenv`, you can easily
 run the script using:
 
-```python
+```bash
 virtualenv -p "$(which python3)" env
 . env/bin/activate
 pip install -r requirements.txt
