@@ -1,3 +1,4 @@
 virtuoso-opensource-*
 virtuoso-install/
 *.log
+db/
