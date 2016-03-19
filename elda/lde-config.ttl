@@ -15,14 +15,14 @@
 @prefix elda:               <http://www.epimorphics.com/vocabularies/lda#> .
 
 # Prefix for example-local entities.
-@prefix lde:                <http://example.com/> .
+@prefix lde:                <http://example.com/lde#> .
 
 # ---------------------------------------------------------------------
 # API config
 
 lde:lde-api a api:API
     ; rdfs:label "Accident data API"@en
-    ; api:sparqlEndpoint <local:lde-data.ttl>
+    ; api:sparqlEndpoint <http://localhost:3030/accidents>
     # ; api:defaultViewer api:labelledDescribeViewer
     ; api:defaultFormatter lde:HtmlFormatter
     ; api:formatter
@@ -55,11 +55,4 @@ lde:HtmlFormatter a api:XsltFormatter
 lde:Accident a rdfs:Class
     ; rdfs:label "Accident"
     ; api:label "Accident"
-    .
-
-# The idea is that each instance of lde:Accident can have an lde:tweet property
-# giving the contents of the tweet in which the accident was reported.
-lde:tweet a rdf:Property
-    ; api:label "tweet"
-    ; rdfs:range xsd:string
     .

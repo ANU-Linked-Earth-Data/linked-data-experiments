@@ -20,4 +20,4 @@ if [ ! -d "$DEST_DIR" ]; then
     tar xf "$DEST_TGZ"
 fi
 
-ln -s "$DEST_DIR/bin/soh" ./soh
+ln -sf "$DEST_DIR/bin/soh" ./soh
