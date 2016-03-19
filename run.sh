@@ -2,7 +2,8 @@
 
 function run() {
     cd $1
-    ./run-$1.sh >> log
+    echo RUNNING $1
+    ./run-$1.sh 1> stdout.log 2> errors.log
 }
 
 run fuseki &
