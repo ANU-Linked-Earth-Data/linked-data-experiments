@@ -5,7 +5,7 @@ set -e
 VERSION=2.3.1
 DEST_TGZ="apache-jena-fuseki-${VERSION}.tar.gz"
 DEST_TGZ_MD5SUM="b8ee1ecfb47849550f9412450606c606  $DEST"
-DEST_DIR="apache-jena-fuseki-${VERSION}"
+DEST_DIR="$(pwd)/apache-jena-fuseki-${VERSION}"
 URL="http://apache.mirror.serversaustralia.com.au/jena/binaries/apache-jena-fuseki-${VERSION}.tar.gz"
 
 if [ ! -d "$DEST_DIR" ]; then
@@ -19,3 +19,5 @@ if [ ! -d "$DEST_DIR" ]; then
 
     tar xf "$DEST_TGZ"
 fi
+
+ln -s "$DEST_DIR/bin/soh" ./soh

@@ -65,7 +65,7 @@ parser.add_argument(
     '--streets', type=FileType('r'), default='data/streets.json'
 )
 parser.add_argument(
-    '--out', type=FileType('wb'), default='data/accidents.rdf+xml'
+    '--out', type=FileType('wb'), default='data/accidents.rdf'
 )
 
 if __name__ == '__main__':
