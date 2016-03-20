@@ -39,7 +39,24 @@ def slow(generator, suffix, interval=500, total=None):
         yield val
 
 
+def accident_triples(tweet, data, ident):
+    """Produces some triples describing a single accident, identified by ident.
+    The identifier can then be stuck in a CoverageJSON-like document."""
+    rv = [
+        (ident, RDF.type, LDE.Accident),
+        (ident, LDE.description, Literal(tweet['normalised']))
+    ]
+    for loc in data.locations:
+        loc_uri = URIRef(loc.uri)
+        rv.append((ident, LDE.location, loc_uri))
+        rv.append((loc_uri, RDF.type, LDE.Street))
+        rv.append((loc_uri, LDE.streetName, Literal(loc.street)))
+        rv.append((loc_uri, LDE.suburbName, Literal(loc.suburb)))
+    return rv
+
+
 def build_graph(tweets):
+    # TODO: Should also build coverage according to CovJSON spec here.
     rv = Graph()
     rv.namespace_manager.bind('lde', LDE)
     for tweet in slow(tweets, 'tweets processed so far', total=len(tweets)):
@@ -47,14 +64,11 @@ def build_graph(tweets):
         if data is None:
             continue
         ident = URIRef(data.uri)
-        rv.add((ident, RDF.type, LDE.Accident))
-        rv.add((ident, LDE.description, Literal(tweet['normalised'])))
-        for loc in data.locations:
-            loc_uri = URIRef(loc.uri)
-            rv.add((ident, LDE.location, loc_uri))
-            rv.add((loc_uri, RDF.type, LDE.Street))
-            rv.add((loc_uri, LDE.streetName, Literal(loc.street)))
-            rv.add((loc_uri, LDE.suburbName, Literal(loc.suburb)))
+        # First add data describing the accident
+        for triple in accident_triples(tweet, data, ident):
+            rv.add(triple)
+        # Now, for each location mentioned, add the accident to our coverage at
+        # that location
     return rv
 
 parser = ArgumentParser()
