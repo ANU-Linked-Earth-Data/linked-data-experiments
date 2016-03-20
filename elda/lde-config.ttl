@@ -39,7 +39,10 @@ lde:lde-api a api:API
 lde:accidents a api:ListEndpoint
     ; rdfs:label "Accidents"
     ; api:uriTemplate "/accidents"
-    ; api:selector [api:filter "type=Accident"; api:sort "label"]
+    ; api:selector
+        [ api:filter [ a lde:Accident ]
+        ; api:sort "label"
+        ]
     .
 #
 # This XSLT formatter produces rich HTML from the viewer properties.
