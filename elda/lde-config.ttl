@@ -26,12 +26,13 @@ lde:lde-api a api:API
     # ; api:defaultViewer api:labelledDescribeViewer
     ; api:defaultFormatter lde:HtmlFormatter
     ; api:formatter
-        [a elda:FeedFormatter
+        [ a elda:FeedFormatter
         ; api:name "atom"
         ; elda:className "com.epimorphics.lda.renderers.FeedRendererFactory"
         ; api:mimeType "application/atom+xml"
         ]
     ; api:endpoint lde:accidents
+    ; api:endpoint lde:streets
     .
 
 # Endpoint definition
@@ -40,7 +41,16 @@ lde:accidents a api:ListEndpoint
     ; rdfs:label "Accidents"
     ; api:uriTemplate "/accidents"
     ; api:selector
-        [ api:filter [ a lde:Accident ]
+        [ api:type lde:Accident
+        ; api:sort "label"
+        ]
+    .
+
+lde:streets a api:ListEndpoint
+    ; rdfs:label "Streets"
+    ; api:uriTemplate "/streets"
+    ; api:selector
+        [ api:type lde:Street
         ; api:sort "label"
         ]
     .
@@ -58,4 +68,10 @@ lde:HtmlFormatter a api:XsltFormatter
 lde:Accident a rdfs:Class
     ; rdfs:label "Accident"
     ; api:label "Accident"
+    .
+
+
+lde:Street a rdfs:Class
+    ; rdfs:label "Street"
+    ; api:label "Street"
     .
