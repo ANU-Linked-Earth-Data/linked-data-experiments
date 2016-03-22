@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-
 from rdflib import Graph, Literal, Namespace, RDF, URIRef
-
 from argparse import ArgumentParser, FileType
 from collections import namedtuple
 from json import load
@@ -83,7 +81,7 @@ parser.add_argument(
     '--streets', type=FileType('r'), default='data/streets.json'
 )
 parser.add_argument(
-    '--out', type=FileType('wb'), default='data/accidents.rdf'
+    '--out', type=FileType('wb'), default='data/accidents.ttl'
 )
 
 if __name__ == '__main__':
@@ -92,5 +90,5 @@ if __name__ == '__main__':
     tweets = load(args.tweets)
     print('Loaded {} tweets and {} streets'.format(len(tweets), len(streets)))
     graph = build_graph(tweets)
-    graph.serialize(args.out, format='xml')
+    graph.serialize(args.out, format='turtle')
     print('Result written to', args.out.name)
