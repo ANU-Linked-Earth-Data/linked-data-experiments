@@ -3,9 +3,11 @@
 function run() {
     cd $1
     echo RUNNING $1
-    ./run-$1.sh 1> stdout.log 2> errors.log
+    ./run-$1.sh 1> ../log 2> ../log
 }
 
 run fuseki &
-run elda
+run elda &
+
+tail -f log
 
