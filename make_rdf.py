@@ -8,7 +8,9 @@ from json import load
 from urllib.parse import quote_plus
 
 LDE = Namespace('http://example.com/lde#')
-Accident = namedtuple('Accident', ['locations', 'uri', 'message'])
+GEO = Namespace('http://www.w3.org/2003/01/geo/wgs84_pos#')
+
+Accident = namedtuple('Accident', ['locations', 'uri', 'message', 'datetime'])
 Location = namedtuple('Location', ['lat', 'lon', 'street', 'suburb', 'uri'])
 
 
@@ -27,7 +29,7 @@ def accident_data(tweet):
             lat=lat, lon=lon, street=street, suburb=suburb, uri=loc_uri
         ))
     return Accident(
-        locations=locs, uri=uri, message=tweet['normalised']
+        locations=locs, uri=uri, message=tweet['normalised'], datetime=tweet['datetime']
     )
 
 
@@ -52,6 +54,8 @@ def accident_triples(tweet, data, ident):
         rv.append((loc_uri, RDF.type, LDE.Street))
         rv.append((loc_uri, LDE.streetName, Literal(loc.street)))
         rv.append((loc_uri, LDE.suburbName, Literal(loc.suburb)))
+        rv.append((loc_uri, GEO.lat, Literal(loc.lat)))
+        rv.append((loc_uri, GEO['long'], Literal(loc.lon))) # heh
     return rv
 
 
