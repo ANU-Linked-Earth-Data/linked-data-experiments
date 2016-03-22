@@ -12,8 +12,10 @@ dependencies (see `requirements.txt`). If you have `virtualenv`, you can easily
 run the script using:
 
 ```bash
-virtualenv -p "$(which python3)" env
-. env/bin/activate
-pip install -r requirements.txt
-./make_rdf.py
+$ virtualenv -p "$(which python3)" env
+$ . env/bin/activate
+$ pip install -r requirements.txt
+$ ./make_rdf.py
+$ # with Fuseki running already
+$ fuseki/soh put 'http://localhost:3030/accidents' default data/accidents.ttl
 ```
