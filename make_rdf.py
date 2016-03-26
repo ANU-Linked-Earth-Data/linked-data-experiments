@@ -4,7 +4,7 @@ from collections import namedtuple
 from datetime import datetime
 from json import load, dumps, JSONEncoder
 from pytz import timezone
-from rdflib import Graph, Literal, Namespace, RDF, URIRef
+from rdflib import ConjunctiveGraph, Literal, Namespace, RDF, URIRef
 from urllib.parse import quote_plus
 
 LDE = Namespace('http://example.com/lde#')
@@ -14,7 +14,6 @@ OWL = Namespace('http://www.w3.org/2002/07/owl#')
 
 Accident = namedtuple('Accident', ['locations', 'uri', 'message', 'datetime'])
 Location = namedtuple('Location', ['lat', 'lon', 'street', 'suburb', 'uri'])
-
 
 def parse_date(date_str):
     # Parse string (no timezone)
@@ -30,7 +29,6 @@ def parse_date(date_str):
     dt = tz.localize(dt)
 
     return dt
-
 
 def accident_data(tweet):
     if not tweet['mentioned_locations']:
@@ -59,24 +57,23 @@ def slow(generator, suffix, interval=500, total=None):
             print('{}{} {}'.format(idx, tot_str, suffix))
         yield val
 
-
 def accident_triples(tweet, data, ident):
     """Produces some triples describing a single accident, identified by ident.
     The identifier can then be stuck in a CoverageJSON-like document."""
-    rv = [
+    yield from [
         (ident, RDF.type, LDE.Accident),
         (ident, LDE.description, Literal(tweet['normalised']))
     ]
     for loc in data.locations:
         loc_uri = URIRef(loc.uri)
-        rv.append((ident, LDE.location, loc_uri))
-        rv.append((loc_uri, RDF.type, LDE.Street))
-        rv.append((loc_uri, LDE.streetName, Literal(loc.street)))
-        rv.append((loc_uri, LDE.suburbName, Literal(loc.suburb)))
-        rv.append((loc_uri, GEO.lat, Literal(loc.lat)))
-        rv.append((loc_uri, GEO['long'], Literal(loc.lon)))  # heh
-    return rv
-
+        yield from [
+            (ident, LDE.location, loc_uri),
+            (loc_uri, RDF.type, LDE.Street),
+            (loc_uri, LDE.streetName, Literal(loc.street)),
+            (loc_uri, LDE.suburbName, Literal(loc.suburb)),
+            (loc_uri, GEO.lat, Literal(loc.lat)),
+            (loc_uri, GEO['long'], Literal(loc.lon))
+        ]
 
 class DatetimeJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -123,25 +120,27 @@ def accident_coverage_triples(txy_list, accident_urls):
         (rng, LGDDS.rangeValues, Literal(json_urls))
     ]
 
-
-def build_graph(tweets):
-    rv = Graph()
+def add_namespaces(rv):
     rv.namespace_manager.bind('lde', LDE)
     rv.namespace_manager.bind('linkedgdds', LGDDS)
     rv.namespace_manager.bind('owl', OWL)
+
+def build_graph(tweets):
 
     # These two lists will be used to construct the coverage
     txy_list = []
     accident_url_list = []
 
+    i = 0
     for tweet in slow(tweets, 'tweets processed so far', total=len(tweets)):
         data = accident_data(tweet)
         if data is None:
             continue
+
         ident = URIRef(data.uri)
+
         # First add data describing the accident
-        for triple in accident_triples(tweet, data, ident):
-            rv.add(triple)
+        yield from accident_triples(tweet, data, ident)
 
         # Build up lists necessary to produce coverage
         t = data.datetime
@@ -151,10 +150,7 @@ def build_graph(tweets):
             txy_list.append((t, x, y))
             accident_url_list.append(ident)
 
-    for triple in accident_coverage_triples(txy_list, accident_url_list):
-        rv.add(triple)
-
-    return rv
+    yield from accident_coverage_triples(txy_list, accident_url_list)
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -168,10 +164,16 @@ parser.add_argument(
 )
 
 if __name__ == '__main__':
-    args = parser.parse_args()
+    args    = parser.parse_args()
     streets = load(args.streets)
-    tweets = load(args.tweets)
+    tweets  = load(args.tweets)
     print('Loaded {} tweets and {} streets'.format(len(tweets), len(streets)))
-    graph = build_graph(tweets)
-    graph.serialize(args.out, format='turtle')
-    print('Result written to', args.out.name)
+
+    fuseki = ConjunctiveGraph(store='SPARQLUpdateStore')
+    fuseki.open(('http://localhost:3030/accidents/query',
+                'http://localhost:3030/accidents/update'))
+    default = 'urn:x-arq:DefaultGraph'
+
+    add_namespaces(fuseki)
+    fuseki.addN((s,p,o,default) for s,p,o in build_graph(tweets))
+    fuseki.close()
