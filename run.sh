@@ -7,6 +7,7 @@ function run() {
 }
 
 run fuseki &
+run elda &
 
 tail -f log
 
