@@ -24,7 +24,7 @@ data, so it's important that you direct all SPARQL updates at the graph
 an example:
 
 ```sh
-UPDATE_SERVICE=http://localhost:3030/accidents
+UPDATE_SERVICE=http://localhost:3030/accidents/update
 UPDATE="INSERT DATA{GRAPH <urn:x-arq:DefaultGraph>{<urn:foo><urn:bar><urn:baz>.}}"
 ./soh update --service="$UPDATE_SERVICE" "$UPDATE"
 ```
