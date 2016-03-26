@@ -5,9 +5,12 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix fuseki: <http://jena.apache.org/fuseki#> .
 
-:dataset  a     ja:RDFDataset .
+:dataset a tdb:DatasetTDB
+    ; tdb:location "DB" 
+    ; ja:defaultGraph <#accidents>
+    .
 
-:service1  a                          fuseki:Service ;
+:service1 a fuseki:Service ;
         fuseki:dataset                :dataset ;
         fuseki:name                   "accidents" ;
         fuseki:serviceQuery           "query" , "sparql" ;
