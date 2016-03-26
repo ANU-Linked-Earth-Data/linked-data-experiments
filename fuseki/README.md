@@ -14,3 +14,17 @@ QUERY='SELECT ?a ?b ?c WHERE { ?a ?b ?c } LIMIT 10'
 ./soh put "$SERVICE" default ../data/accidents.rdf
 ./soh query --output=tsv --service="$SERVICE" "$QUERY"
 ```
+
+## Using SPARQL
+
+SPARQL queries can be sent using `./soh query` (as above), and SPARQL updates
+using `./soh update`. We're just using the default graph for the experimental
+data, so it's important that you direct all SPARQL updates at the graph
+`urn:x-arq:DefaultGraph` (Fuseki's special name for the default graph). Here's
+an example:
+
+```sh
+UPDATE_SERVICE=http://localhost:3030/accidents/update
+UPDATE="INSERT DATA{GRAPH <urn:x-arq:DefaultGraph>{<urn:foo><urn:bar><urn:baz>.}}"
+./soh update --service="$UPDATE_SERVICE" "$UPDATE"
+```
