@@ -27,4 +27,8 @@
    # ja:loadClass "your.code.Class" ;   
 
    # End triples.
+   fuseki:services (<#accidents>)
    .
+
+tdb:DatasetTDB  rdfs:subClassOf  ja:RDFDataset .
+tdb:GraphTDB    rdfs:subClassOf  ja:Model .
