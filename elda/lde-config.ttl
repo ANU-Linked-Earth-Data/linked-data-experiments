@@ -70,8 +70,27 @@ lde:Accident a rdfs:Class
     ; api:label "Accident"
     .
 
-
 lde:Street a rdfs:Class
     ; rdfs:label "Street"
     ; api:label "Street"
+    .
+
+lde:description a rdf:Property
+    ; rdfs:label "description"
+    ; api:label "description"
+    .
+
+lde:location a rdf:Property
+    ; rdfs:label "location"
+    ; api:label "location"
+    .
+
+lde:streetName a rdf:Property
+    ; rdfs:label "street name"
+    ; api:label "streetName"
+    .
+
+lde:suburbName a rdf:Property
+    ; rdfs:label "suburb name"
+    ; api:label "suburbName"
     .
