@@ -1,5 +1,10 @@
 # Experiments with linked data
 
+**Warning:** this repository is unlikely to be updated in the future, as we have
+learnt enough from our experiments to begin working on the [actual
+middleware](https://github.com/ANU-Linked-Earth-Data/middleware) which we will
+use to process and store earth observations.
+
 This repository contains some data munging scripts and Elda/Virtuoso
 configurations for playing with linked data. The dataset in `data/` was taken
 from a COMP1040 assignment in S2 2015, which was in turn derived from ACT police
